@@ -18,6 +18,8 @@ function validFileType(file) {
     return fileTypes.includes(file.type);
 }
 
+// function 
+
 function returnFileSize(number) {
   if (number < 1e3) {
     return `${number} bytes`;
@@ -28,16 +30,17 @@ function returnFileSize(number) {
 }
 
 
-export const FileCard = ({name, size, img}) => {
+export const FileCard = ({name, size, img, type}) => {
     return (
         <div style={{
             backgroundColor: '#f9fafb',
             justifyContent: 'space-between',
             alignItems: 'center',
             display: 'flex',
-            flexDirection: 'row',
-            gap: '16px',
-            padding: '16px',
+            flexDirection: 'column',
+            // gap: '5px',
+            padding: '5px',
+            paddingTop: "10px",
             margin: '10px auto',
             border: '1px solid #e5e7eb',
             borderRadius: '12px',
@@ -45,21 +48,34 @@ export const FileCard = ({name, size, img}) => {
             maxWidth: "500px",
             width: "100%"
         }}>
-            <div>
-                <p style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '4px', color: 'black' }}>{name}</p>
-                <p style={{ color: '#555', fontSize: '0.95rem' }}>{size}</p>
-            </div>
             <img
                 src={URL.createObjectURL(img)}
                 alt={name}
                 style={{
-                    width: '100px',
-                    height: '100px',
+                    width: '150px',
+                    height: '150px',
                     objectFit: 'cover',
                     borderRadius: '8px',
                     border: '1px solid #ddd',
                 }}
             />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+                <p style={{
+                    fontWeight: 'bold',
+                    fontSize: '1.1rem',
+                    marginTop: '1px',
+                    marginBottom: '1px',
+                    color: 'black',
+                    width : "120px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                    }}>{name}</p>
+                <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "5px", paddingRight: "5px" }}>
+                    <p style={{ color: '#555', fontSize: '0.95rem', marginTop: '2px', marginBottom: '2px', }}>{size}</p>
+                    <p style={{ color: '#555', fontSize: '0.95rem', marginTop: '2px', marginBottom: '2px', }}>{type}</p>
+                </div>
+            </div>
         </div>
     )
 }
@@ -76,6 +92,7 @@ export default function App() {
 
     const handleChange = (e) => {
         setSelectedFiles(Array.from(e.target.files));
+        console.log(e.target.files)
     }
 
     const handleSubmit = async (e) => {
@@ -118,17 +135,26 @@ export default function App() {
             <div style={{
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                display: 'flex', 
+                marginTop: "auto",
+                marginBottom: "auto",
+                display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: "blue",
-                height: "100%",
+                // backgroundColor: "blue",
+                // height: "50vh",
+                // width: "600px",
+                width: "auto",
+                paddingLeft: "40px",
+                paddingRight: "50px",
                 paddingBottom: "20px",
-                maxWidth: "700px",
-                inset: "0",
-                // position: "fixed",
-                maxHeight: "800px",
+                // maxWidth: "900px",
+                // inset: "0",
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                // maxHeight: "800px",
                 borderRadius: "10px",
                 boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"
                 }}>
@@ -137,27 +163,29 @@ export default function App() {
             </h1>
 
             <form action="http://127.0.0.1:5000/upload" onSubmit={handleSubmit} method="post" encType="multipart/form-data" style={{
-              display: "flex",
+            //   display: "flex",
               flexDirection: "column",
-              alignItems: "center"
+              alignItems: "center",
+              width: "fit",
+              display: "inline-flex",
             }}>
-                <label
+                {/* <label
                     htmlFor="image"
-                    style={{
-                        display: "inline-block",
-                        padding: "10px 20px",
-                        background: "#007bff",
-                        color: "#fff",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        marginBottom: "1rem",
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                        textAlign: "center"
-                    }}
+                    // style={{
+                    //     display: "inline-block",
+                    //     padding: "10px 20px",
+                    //     background: "#007bff",
+                    //     color: "#fff",
+                    //     borderRadius: "4px",
+                    //     cursor: "pointer",
+                    //     marginBottom: "1rem",
+                    //     fontWeight: "bold",
+                    //     fontSize: "1rem",
+                    //     textAlign: "center"
+                    // }}
                 >
                     Select images to upload
-                </label>
+                </label> */}
                 <input
                     type="file"
                     id="image"
@@ -165,27 +193,27 @@ export default function App() {
                     multiple
                     ref={inputRef}
                     accept="image/*"
-                    style={{ display: 'none' }}
+                    style={{ border: "1px solid black", width: "350px", padding: "10px", borderRadius: "12px" }}
                     onChange={handleChange}
                 />
-                <div className="preview" style={{ display: "flex", flexDirection: "row" }}>
+                <div className="preview">
                 {
                   selectedFiles.length === 0 ? (
                         <p>No files currently selected for upload</p>
                     ) : (
-                        <ol >
+                        <ol style={{ listStyle: 'none', padding: "0", margin: "0", display: "flex", flexDirection: "row", gap: "20px" }}>
                             {selectedFiles.map((file, index) => (
-                                <li key={index} style={{ listStyle: 'none' }}>
+                                <li key={index}>
                                     {validFileType(file) ? (
-                                        <>
+                                        <div>
                                             {/* <p>{`File name ${file.name}, file size ${returnFileSize(file.size)}`}</p>
                                             <img
                                                 src={URL.createObjectURL(file)}
                                                 alt={file.name}
                                                 style={{ maxWidth: "200px", maxHeight: "200px" }}
                                             /> */}
-                                            <FileCard name={file.name} size={returnFileSize(file.size)} img={file}/>
-                                        </>
+                                            <FileCard name={file.name} size={returnFileSize(file.size)} img={file} type={file.type}/>
+                                        </div>
                                     ) : (
                                         <>
                                             <p>{`File name ${file.name}, Not a valid file type. Update your selection`}</p>
@@ -198,7 +226,18 @@ export default function App() {
                 }
                 </div>
                 <br />
-                <button type="submit" name="submit">Upload and process</button>
+                <button style={{
+                        display: "inline-block",
+                        padding: "10px 20px",
+                        background: "#007bff",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        marginBottom: "1rem",
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        textAlign: "center"
+                    }} type="submit" name="submit">Upload and process</button>
             </form>
         </div>
     )

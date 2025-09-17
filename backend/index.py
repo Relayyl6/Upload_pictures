@@ -131,7 +131,7 @@ def upload():
                 cartoon_image.save(ct_file_path)
 
                 # Remove the original image
-                # os.remove(image_file_path)
+                os.remove(image_file_path)
 
         zip_path = os.path.join(OUTPUT_DIR, f"{session_id}.zip")
         with ZipFile(zip_path, 'w') as ZipF:
