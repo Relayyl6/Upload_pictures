@@ -117,9 +117,13 @@ cd project-root
    The frontend will run at:
    👉 `http://localhost:3000`
 
+### Screenshot
+
+![App Screenshot](screenshot.png)
+
 ---
 
-##  Usage
+## Usage
 
 1. Open the React app in your browser.
 2. Select and upload one or more images.
